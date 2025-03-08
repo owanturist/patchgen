@@ -1,9 +1,13 @@
 ---
-import "~/styles.css";
+import "~/styles.css"
+
+interface Props {
+  class?: string
+}
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class={Astro.props.class}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
