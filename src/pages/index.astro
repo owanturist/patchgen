@@ -2,10 +2,13 @@
 import Layout from "~/layouts/Layout.astro"
 
 import { ALL_PATCHES } from "~/tools/patch"
+import { shuffle } from "~/tools/shuffle"
 
 const columns = ALL_PATCHES.flatMap((patch) =>
   patch.tiles.map((row) => row.length),
 ).reduce((acc, val) => Math.max(acc, val), 0)
+
+const SHUFFLED_PATCHES = [ALL_PATCHES[0], ...shuffle(ALL_PATCHES.slice(1))]
 ---
 
 <Layout class="snap-y snap-mandatory">
@@ -16,7 +19,7 @@ const columns = ALL_PATCHES.flatMap((patch) =>
     }}
   >
     {
-      ALL_PATCHES.map((patch) => (
+      SHUFFLED_PATCHES.map((patch) => (
         <div class="grid col-span-full grid-cols-subgrid min-h-screen items-center justify-center snap-center">
           <div class="grid col-span-full grid-cols-subgrid gap-px">
             {patch.tiles.map((row, rowIndex) => {

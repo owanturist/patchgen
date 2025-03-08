@@ -6,6 +6,16 @@ export interface Patch {
 
 export const ALL_PATCHES = [
   {
+    price: 2,
+    time: 1,
+    tiles: [
+      //
+      [1],
+      [1],
+    ],
+  },
+
+  {
     price: 5,
     time: 3,
     tiles: [
@@ -340,14 +350,4 @@ export const ALL_PATCHES = [
       [1, 1],
     ],
   },
-
-  {
-    price: 2,
-    time: 1,
-    tiles: [
-      //
-      [1],
-      [1],
-    ],
-  },
-] satisfies ReadonlyArray<Patch>
+] as const satisfies ReadonlyArray<Patch>
