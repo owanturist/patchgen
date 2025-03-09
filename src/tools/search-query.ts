@@ -3,9 +3,15 @@ export type SearchQuerySetter = (
 ) => void
 
 export function searchQuery(
-  listener: (params: URLSearchParams, setter: SearchQuerySetter) => void,
+  listener: (params: URLSearchParams) => void,
 ): SearchQuerySetter {
-  const searchQuerySetter: SearchQuerySetter = (reducer) => {
+  window.addEventListener("popstate", () => {
+    listener(new URLSearchParams(window.location.search))
+  })
+
+  listener(new URLSearchParams(window.location.search))
+
+  return (reducer) => {
     const current = new URLSearchParams(window.location.search)
     const next = new URLSearchParams(current)
 
@@ -18,15 +24,7 @@ export function searchQuery(
         next.toString() === "" ? window.location.pathname : `?${next}`,
       )
 
-      listener(next, searchQuerySetter)
+      listener(next)
     }
   }
-
-  window.addEventListener("popstate", () => {
-    listener(new URLSearchParams(window.location.search), searchQuerySetter)
-  })
-
-  listener(new URLSearchParams(window.location.search), searchQuerySetter)
-
-  return searchQuerySetter
 }
