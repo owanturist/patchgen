@@ -8,13 +8,20 @@ export interface Props {
   patch: Patch
 }
 
-const { class: classList, patch } = Astro.props
+const { class: className, patch } = Astro.props
+
+const width = Math.max(...patch.tiles.map((row) => row.length))
 ---
 
-<div class:list={["grid items-center justify-center", classList]}>
-  <div class="grid col-span-full grid-cols-subgrid gap-px">
+<div class:list={["p-6 bg-gray-100 rounded", className]}>
+  <div
+    class="grid col-span-full grid-cols-subgrid gap-px justify-center"
+    style={{
+      gridTemplateColumns: `repeat(${width}, minmax(0, max-content))`,
+    }}
+  >
     {
-      patch.tiles.map((row, rowIndex) => {
+      patch.tiles.flatMap((row, rowIndex) => {
         return row.map((tile, colIndex) => {
           if (tile === 0) {
             return null
@@ -22,9 +29,9 @@ const { class: classList, patch } = Astro.props
 
           return (
             <div
-              class="col-span-2 bg-gray-300 ring-1 aspect-square flex justify-center items-center"
+              class="bg-gray-300 ring-1 w-20 aspect-square flex justify-center items-center"
               style={{
-                gridColumnStart: 2 * colIndex + 1,
+                gridColumnStart: colIndex + 1,
                 gridRowStart: rowIndex + 1,
               }}
             >
@@ -34,17 +41,15 @@ const { class: classList, patch } = Astro.props
         })
       })
     }
+  </div>
 
-    <div
-      class="mt-4 col-span-full flex justify-center gap-6 text-4xl tabular-nums"
-    >
-      <p class="flex items-center gap-2 text-blue-400">
-        {patch.price}<SewButton outlined class="size-8" />
-      </p>
+  <div class="mt-6 flex justify-center gap-6 text-4xl tabular-nums">
+    <p class="flex items-center gap-2 text-blue-400">
+      {patch.price}<SewButton outlined class="size-8" />
+    </p>
 
-      <p class="flex items-center gap-2 text-amber-900">
-        {patch.time}<Hourglass class="size-8" />
-      </p>
-    </div>
+    <p class="flex items-center gap-2 text-amber-900">
+      {patch.time}<Hourglass class="size-8" />
+    </p>
   </div>
 </div>

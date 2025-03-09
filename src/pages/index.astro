@@ -16,7 +16,7 @@ const maxPatchWidth = Math.max(
   const allPatchCards = document.querySelectorAll<HTMLDivElement>(".patch-card")
 
   const orders = shuffle(
-    seed("kek"),
+    seed(new Date().toISOString()),
     Array.from(allPatchCards).map((_, index) => index),
     1,
   )
@@ -24,19 +24,15 @@ const maxPatchWidth = Math.max(
   for (const [index, patchCard] of allPatchCards.entries()) {
     // set order css property as orders[index]
     patchCard.style.order = String(orders[index])
+    patchCard.classList.remove("opacity-0")
   }
 </script>
-<Root class="snap-y snap-mandatory">
-  <div
-    class="max-w-sm mx-auto grid p-6 divide-y-4 divide-dashed divide-gray-300 blue"
-    style={{
-      gridTemplateColumns: `repeat(${2 * maxPatchWidth}, minmax(0, 1fr))`,
-    }}
-  >
+<Root class="snap-y">
+  <div class="max-w-sm mx-auto p-4 flex flex-col gap-y-4">
     {
       ALL_PATCHES.map((patch) => (
         <PatchCard
-          class="patch-card col-span-full grid-cols-subgrid min-h-screen snap-center"
+          class="patch-card snap-center opacity-0 transition-opacity"
           patch={patch}
         />
       ))
