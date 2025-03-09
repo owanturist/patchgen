@@ -12,9 +12,11 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.12",
     "astro": "^5.4.2",
+    "seed-random": "^2.2.0",
     "tailwindcss": "^4.0.12"
   },
   "devDependencies": {
+    "@types/seed-random": "^2.2.4",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1"
   }

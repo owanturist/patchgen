@@ -1,17 +1,31 @@
 ---
 import Root from "~/layouts/root.astro"
-
 import PatchCard from "~/components/patch-card.astro"
 import { ALL_PATCHES } from "~/tools/patch"
-import { shuffle } from "~/tools/shuffle"
 
 const maxPatchWidth = Math.max(
   ...ALL_PATCHES.flatMap((patch) => patch.tiles.map((row) => row.length)),
 )
-
-const SHUFFLED_PATCHES = shuffle(ALL_PATCHES, 1)
 ---
 
+<script>
+  import seed from "seed-random"
+
+  import { shuffle } from "~/tools/shuffle"
+
+  const allPatchCards = document.querySelectorAll<HTMLDivElement>(".patch-card")
+
+  const orders = shuffle(
+    seed("kek"),
+    Array.from(allPatchCards).map((_, index) => index),
+    1,
+  )
+
+  for (const [index, patchCard] of allPatchCards.entries()) {
+    // set order css property as orders[index]
+    patchCard.style.order = String(orders[index])
+  }
+</script>
 <Root class="snap-y snap-mandatory">
   <div
     class="max-w-sm mx-auto grid p-6 divide-y-4 divide-dashed divide-gray-300 blue"
@@ -20,9 +34,9 @@ const SHUFFLED_PATCHES = shuffle(ALL_PATCHES, 1)
     }}
   >
     {
-      SHUFFLED_PATCHES.map((patch) => (
+      ALL_PATCHES.map((patch) => (
         <PatchCard
-          class="col-span-full grid-cols-subgrid min-h-screen snap-center"
+          class="patch-card col-span-full grid-cols-subgrid min-h-screen snap-center"
           patch={patch}
         />
       ))
