@@ -9,7 +9,7 @@ const maxPatchWidth = Math.max(
   ...ALL_PATCHES.flatMap((patch) => patch.tiles.map((row) => row.length)),
 )
 
-const SHUFFLED_PATCHES = [ALL_PATCHES[0], ...shuffle(ALL_PATCHES.slice(1))]
+const SHUFFLED_PATCHES = shuffle(ALL_PATCHES, 1)
 ---
 
 <Root class="snap-y snap-mandatory">

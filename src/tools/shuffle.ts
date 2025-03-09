@@ -1,13 +1,17 @@
-export function shuffle<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
-  const shuffled = array.slice()
+export function shuffle<T>(
+  array: ReadonlyArray<T>,
+  start = 0,
+  end = array.length - 1,
+): ReadonlyArray<T> {
+  const result = array.slice()
 
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    const tmp = shuffled[i]
+  for (let source = start; source < end; source++) {
+    const target = Math.floor(Math.random() * (end - source + 1)) + source
+    const tmp = result[source]
 
-    shuffled[i] = shuffled[j]
-    shuffled[j] = tmp
+    result[source] = result[target]
+    result[target] = tmp
   }
 
-  return shuffled
+  return result
 }
