@@ -4,10 +4,12 @@ import "~/styles.css"
 interface Props {
   class?: string
 }
+
+const { class: className, ...props } = Astro.props
 ---
 
 <!doctype html>
-<html lang="en" class={Astro.props.class}>
+<html lang="en" class:list={["h-full min-h-full", className]} {...props}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -15,7 +17,7 @@ interface Props {
     <meta name="generator" content={Astro.generator} />
     <title>Patchgen</title>
   </head>
-  <body>
+  <body class="min-h-full">
     <slot />
   </body>
 </html>

@@ -2,10 +2,6 @@
 import Root from "~/layouts/root.astro"
 import PatchCard from "~/components/patch-card.astro"
 import { ALL_PATCHES } from "~/tools/patch"
-
-const maxPatchWidth = Math.max(
-  ...ALL_PATCHES.flatMap((patch) => patch.tiles.map((row) => row.length)),
-)
 ---
 
 <script>
@@ -16,15 +12,16 @@ const maxPatchWidth = Math.max(
 
   const SEED_QUERY_PARAM = "seed"
   const allPatchCards = document.querySelectorAll<HTMLDivElement>(".patch-card")
+  const [root] = document.getElementsByClassName("group\/root") as unknown as [
+    HTMLHtmlElement,
+  ]
 
-  const setSearchQuery = searchQuery((params, setter) => {
+  const setSearchQuery = searchQuery((params) => {
     const seed = params.get(SEED_QUERY_PARAM)
 
-    if (seed == null) {
-      setter((clone) => {
-        clone.set(SEED_QUERY_PARAM, Date.now().toString())
-      })
-    } else {
+    if (seed) {
+      root.dataset.generated = "true"
+
       const orders = shuffle(
         random(seed),
         Array.from(allPatchCards).map((_, index) => index),
@@ -34,8 +31,9 @@ const maxPatchWidth = Math.max(
       for (const [index, patchCard] of allPatchCards.entries()) {
         // set order css property as orders[index]
         patchCard.style.setProperty("--order", orders[index].toString())
-        patchCard.classList.remove("opacity-0")
       }
+    } else {
+      root.dataset.generated = "false"
     }
   })
 
@@ -43,26 +41,43 @@ const maxPatchWidth = Math.max(
     setSearchQuery((clone) => {
       clone.set(SEED_QUERY_PARAM, Date.now().toString())
     })
+    document.scrollingElement?.scrollTo({ top: 0, behavior: "smooth" })
   })
 </script>
-<Root class="snap-y">
-  <nav class="sticky top-0 bg-gray-300 p-4 shadow">
+<Root class="snap-y group/root">
+  <nav
+    class:list={[
+      "sticky top-0 p-4 flex shadow justify-center items-center bg-gray-300",
+      "group-data-[generated=false]/root:h-screen",
+    ]}
+  >
     <h1 class="font-mono text-4xl text-center">
-      patch<button
+      patch<span class="group-data-[generated=true]/root:hidden">work</span><div
+        class="h-4 group-data-[generated=true]/root:hidden"
+      >
+      </div><button
         type="button"
         id="regenerate"
         autofocus
         class="ml-1 px-2 py-1 text-white bg-blue-400 rounded outline-offset-2 outline-blue-400 focus-within:outline-dashed focus-within:outline-2"
-        >gen</button
+        >gen<span class="group-data-[generated=true]/root:hidden">erator</span
+        ></button
       >
+      <div
+        class="mt-2 font-sans text-xl text-gray-500 group-data-[generated=true]/root:hidden"
+      >
+        click 👆 to generate
+      </div>
     </h1>
   </nav>
 
-  <div class="max-w-sm mx-auto p-4 flex flex-col gap-y-4">
+  <div
+    class="max-w-sm mx-auto p-4 hidden flex-col gap-y-4 group-data-[generated=true]/root:flex"
+  >
     {
       ALL_PATCHES.map((patch) => (
         <PatchCard
-          class="patch-card snap-center opacity-0 transition-opacity order-(--order)"
+          class="patch-card snap-center order-(--order)"
           patch={patch}
         />
       ))

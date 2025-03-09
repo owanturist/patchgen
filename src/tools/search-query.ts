@@ -12,7 +12,7 @@ export function searchQuery(
     reducer(next)
 
     if (current.toString() !== next.toString()) {
-      window.history.replaceState(
+      window.history.pushState(
         {},
         "",
         next.toString() === "" ? window.location.pathname : `?${next}`,
