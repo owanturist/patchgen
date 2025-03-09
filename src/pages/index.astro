@@ -1,5 +1,5 @@
 ---
-import Layout from "~/layouts/Layout.astro"
+import Root from "~/layouts/root.astro"
 
 import { ALL_PATCHES } from "~/tools/patch"
 import { shuffle } from "~/tools/shuffle"
@@ -11,7 +11,7 @@ const columns = ALL_PATCHES.flatMap((patch) =>
 const SHUFFLED_PATCHES = [ALL_PATCHES[0], ...shuffle(ALL_PATCHES.slice(1))]
 ---
 
-<Layout class="snap-y snap-mandatory">
+<Root class="snap-y snap-mandatory">
   <div
     class="max-w-sm mx-auto grid px-4 py-6 divide-y-4 divide-dashed divide-gray-300"
     style={{
@@ -52,4 +52,4 @@ const SHUFFLED_PATCHES = [ALL_PATCHES[0], ...shuffle(ALL_PATCHES.slice(1))]
       ))
     }
   </div>
-</Layout>
+</Root>
