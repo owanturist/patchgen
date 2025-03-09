@@ -1,9 +1,7 @@
 ---
-import { Image } from "astro:assets"
-
 import type { Patch } from "~/tools/patch"
-
-import sewButton from "./assets/sew-button.svg"
+import SewButton from "~/components/sew-button.astro"
+import Hourglass from "~/components/hourglass.astro"
 
 export interface Props {
   class?: string
@@ -11,8 +9,6 @@ export interface Props {
 }
 
 const { class: classList, patch } = Astro.props
-
-const patchWidth = Math.max(...patch.tiles.map((row) => row.length))
 ---
 
 <div class:list={["grid items-center justify-center", classList]}>
@@ -32,18 +28,23 @@ const patchWidth = Math.max(...patch.tiles.map((row) => row.length))
                 gridRowStart: rowIndex + 1,
               }}
             >
-              {tile === 2 && (
-                <Image src={sewButton} alt="Sew Button" class="size-3/5" />
-              )}
+              {tile === 2 && <SewButton class="size-3/5" />}
             </div>
           )
         })
       })
     }
 
-    <div class="col-span-full">
-      <p class="font-bold">Price: {patch.price}</p>
-      <p>Time: {patch.time}</p>
+    <div
+      class="mt-4 col-span-full flex justify-center gap-6 text-4xl tabular-nums"
+    >
+      <p class="flex items-center gap-2 text-blue-400">
+        {patch.price}<SewButton outlined class="size-8" />
+      </p>
+
+      <p class="flex items-center gap-2 text-amber-900">
+        {patch.time}<Hourglass class="size-8" />
+      </p>
     </div>
   </div>
 </div>

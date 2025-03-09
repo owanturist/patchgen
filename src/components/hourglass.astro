@@ -1,0 +1,9 @@
+---
+import { Image, type ImgAttributes } from "astro:assets"
+
+import hourglass from "./assets/hourglass.svg"
+
+export interface Props extends Omit<ImgAttributes, "src" | "alt"> {}
+---
+
+<Image {...Astro.props} src={hourglass} alt="hourglass" />

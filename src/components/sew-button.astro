@@ -1,0 +1,18 @@
+---
+import { Image, type ImgAttributes } from "astro:assets"
+
+import sewButton from "./assets/sew-button.svg"
+import sewButtonOutlined from "./assets/sew-button-outlined.svg"
+
+export interface Props extends Omit<ImgAttributes, "src" | "alt"> {
+  outlined?: boolean
+}
+
+const { outlined = false, ...props } = Astro.props
+---
+
+<Image
+  {...props}
+  src={outlined ? sewButtonOutlined : sewButton}
+  alt="sew button"
+/>
