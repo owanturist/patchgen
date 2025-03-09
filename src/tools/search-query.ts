@@ -1,20 +1,24 @@
-export type SearchQuerySetter = (params: URLSearchParams) => void
+export type SearchQuerySetter = (
+  reducer: (params: URLSearchParams) => void,
+) => void
 
 export function searchQuery(
   listener: (params: URLSearchParams, setter: SearchQuerySetter) => void,
 ): SearchQuerySetter {
-  const searchQuerySetter: SearchQuerySetter = (params) => {
-    const current = new URLSearchParams(window.location.search).toString()
-    const next = params.toString()
+  const searchQuerySetter: SearchQuerySetter = (reducer) => {
+    const current = new URLSearchParams(window.location.search)
+    const next = new URLSearchParams(current)
 
-    if (current !== next) {
+    reducer(next)
+
+    if (current.toString() !== next.toString()) {
       window.history.replaceState(
         {},
         "",
-        next === "" ? window.location.pathname : `?${next}`,
+        next.toString() === "" ? window.location.pathname : `?${next}`,
       )
 
-      listener(params, searchQuerySetter)
+      listener(next, searchQuerySetter)
     }
   }
 

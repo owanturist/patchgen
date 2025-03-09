@@ -17,15 +17,13 @@ const maxPatchWidth = Math.max(
   const SEED_QUERY_PARAM = "seed"
   const allPatchCards = document.querySelectorAll<HTMLDivElement>(".patch-card")
 
-  searchQuery((params, setter) => {
+  const setSearchQuery = searchQuery((params, setter) => {
     const seed = params.get(SEED_QUERY_PARAM)
 
     if (seed == null) {
-      const clone = new URLSearchParams(params)
-
-      clone.set(SEED_QUERY_PARAM, Date.now().toString())
-
-      setter(clone)
+      setter((clone) => {
+        clone.set(SEED_QUERY_PARAM, Date.now().toString())
+      })
     } else {
       const orders = shuffle(
         random(seed),
@@ -35,18 +33,36 @@ const maxPatchWidth = Math.max(
 
       for (const [index, patchCard] of allPatchCards.entries()) {
         // set order css property as orders[index]
-        patchCard.style.order = String(orders[index])
+        patchCard.style.setProperty("--order", orders[index].toString())
         patchCard.classList.remove("opacity-0")
       }
     }
   })
+
+  document.getElementById("regenerate")?.addEventListener("click", () => {
+    setSearchQuery((clone) => {
+      clone.set(SEED_QUERY_PARAM, Date.now().toString())
+    })
+  })
 </script>
 <Root class="snap-y">
+  <nav class="sticky top-0 bg-gray-300 p-4 shadow">
+    <h1 class="font-mono text-4xl text-center">
+      patch<button
+        type="button"
+        id="regenerate"
+        autofocus
+        class="ml-1 px-2 py-1 text-white bg-blue-400 rounded outline-offset-2 outline-blue-400 focus-within:outline-dashed focus-within:outline-2"
+        >gen</button
+      >
+    </h1>
+  </nav>
+
   <div class="max-w-sm mx-auto p-4 flex flex-col gap-y-4">
     {
       ALL_PATCHES.map((patch) => (
         <PatchCard
-          class="patch-card snap-center opacity-0 transition-opacity"
+          class="patch-card snap-center opacity-0 transition-opacity order-(--order)"
           patch={patch}
         />
       ))

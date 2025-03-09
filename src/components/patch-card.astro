@@ -13,7 +13,7 @@ const { class: className, patch } = Astro.props
 const width = Math.max(...patch.tiles.map((row) => row.length))
 ---
 
-<div class:list={["p-6 bg-gray-100 rounded", className]}>
+<div class:list={["px-6 py-12 bg-gray-100 rounded", className]}>
   <div
     class="grid col-span-full grid-cols-subgrid gap-px justify-center"
     style={{
